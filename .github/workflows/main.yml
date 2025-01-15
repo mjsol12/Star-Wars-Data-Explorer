@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: Debug DEPLOYMENT PAT
       run: |
-        if [ -z  "${{ secrets.DEPLOY_PAT }}" ]; then
+        if [ -z  "${{ GITHUB_TOKEN }}" ]; then
           echo "DEPLOYMENT_PAT_ENV is empty"
           exit 1
         else
@@ -24,7 +24,7 @@ jobs:
       run: |
         BRANCH_NAME=${GITHUB_REF##*/}
         echo "Triggering deployment for branch: $BRANCH_NAME"
-        curl -X POST -H "Authorization: token ${{ secrets.DEPLOY_PAT }}" \
+        curl -X POST -H "Authorization: token ${{ GITHUB_TOKEN }}" \
         -H "Accept: application/vnd.github.everest-preview+json" \
         https://api.github.com/repos/mjsol12/Testing-CI-CD/dispatches \
         -d "{\"event_type\": \"trigger-sync\", \"client_payload\": {\"branch\": \"$BRANCH_NAME\"}}"
